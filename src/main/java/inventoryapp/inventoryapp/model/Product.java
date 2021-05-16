@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.NonNull;
 
 @Data
-@Document(collection = "product")
+@Document(collection = "products")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Product {
 @Id

@@ -32,7 +32,7 @@ public class ProductController {
 	
 	@PostMapping("/addProduct")
 	@ResponseStatus(code= HttpStatus.CREATED)
-	public Product add(@RequestBody Product product) {
+	public Product addProducts(@RequestBody Product product) {
 		LOGGER.info("addProduct API Call initiated *****");
 		System.out.println("City inserted Successful"+product);	
 		return this.productService.save(product);
