@@ -21,9 +21,10 @@ public class InventoryAppApplication {
 			return new WebMvcConfigurer() {
 				@Override
 				public void addCorsMappings(CorsRegistry registry) {
-					registry.addMapping("/api/**").allowedOrigins("http://localhost:80","http://localhost:4200","**")
-					.allowedHeaders("Access-Control-Allow-Origin")
-					.allowedMethods("GET","POST","PUT","DELETE");
+					registry.addMapping("/api/**")
+					.allowedOrigins("http://localhost:4200","*")
+					.allowedHeaders("*")
+					.allowedMethods("GET","POST","PUT","DELETE","OPTIONS");
 				}
 			};
 		}

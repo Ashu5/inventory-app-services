@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.mongodb.client.MongoClient;
-
 import inventoryapp.inventoryapp.model.Product;
 import inventoryapp.inventoryapp.service.ProductService;
 
@@ -34,7 +34,16 @@ public class ProductController {
 	@ResponseStatus(code= HttpStatus.CREATED)
 	public Product addProducts(@RequestBody Product product) {
 		LOGGER.info("addProduct API Call initiated *****");
-		System.out.println("City inserted Successful"+product);	
+		if(product.getId()==null) {
+			List<Product> products=this.productService.getAllProducts();
+			Product item=products.get(products.size()-1);
+			String id=item.getId();
+			String oldId=id.substring(0,id.length()-1);
+			int increment=Integer.parseInt(id.substring(2))+1;
+			String newId=oldId+increment;
+			System.out.println("newId"+newId);
+			product.setId(newId);
+		}
 		return this.productService.save(product);
 	}
 	
@@ -58,6 +67,14 @@ public class ProductController {
 		LOGGER.info("updateProduct/id API Call initiated *****");
 		return this.productService.updateProduct(id, product);
 		
+	}
+	
+	
+	@DeleteMapping("/deleteProductById/{id}")
+	@ResponseStatus(code=HttpStatus.OK)
+	public void deleteById(@PathVariable String id) {
+	LOGGER.info("deleteProductById API Call initiated *****");
+	this.productService.deleteById(id);
 	}
 	
 }

@@ -66,4 +66,13 @@ public class ProductService {
 		return updatedProduct;
 		
 	}
+	
+	public void deleteById(String id) {
+		LOGGER.info("***deleteById() call Initiated ***");
+	    LOGGER.info("Deleted Product:"+id);
+	    LOGGER.info("***deleteById() call Terminated ***");
+		this.productRepository.deleteById(id);
+		;
+
+	}
 }
