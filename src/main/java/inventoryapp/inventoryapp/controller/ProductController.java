@@ -33,14 +33,20 @@ public class ProductController {
 	@PostMapping("/addProduct")
 	@ResponseStatus(code= HttpStatus.CREATED)
 	public Product addProducts(@RequestBody Product product) {
+		String newId="";
 		LOGGER.info("addProduct API Call initiated *****");
 		if(product.getId()==null) {
 			List<Product> products=this.productService.getAllProducts();
-			Product item=products.get(products.size()-1);
-			String id=item.getId();
-			String oldId=id.substring(0,id.length()-1);
-			int increment=Integer.parseInt(id.substring(2))+1;
-			String newId=oldId+increment;
+			if(products.size()<1) {
+				newId="P01";
+			}else {
+				Product item=products.get(products.size()-1);
+				String id=item.getId();
+				String oldId=id.substring(0,id.length()-1);
+				int increment=Integer.parseInt(id.substring(2))+1;
+				newId=oldId+increment;
+			}
+			
 			System.out.println("newId"+newId);
 			product.setId(newId);
 		}
