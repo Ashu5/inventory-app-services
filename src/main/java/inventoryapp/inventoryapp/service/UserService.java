@@ -8,6 +8,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+
+import inventoryapp.inventoryapp.exceptions.UserException;
 import inventoryapp.inventoryapp.model.User;
 import inventoryapp.inventoryapp.repository.UserRepository;
 
@@ -31,6 +33,9 @@ public class UserService {
 		System.out.println("FindByEmail:" + email);
 		Query query = new Query(Criteria.where("email").is(email));
 		List<User> users = mongoTemplate.find(query, User.class, "users");
+		if(users==null) {
+			throw new UserException("Email Not Found");
+		}
 		System.out.println(users);
 		LOGGER.info("***findByEmail() call Terminated ***");
 		return users;
@@ -41,8 +46,11 @@ public class UserService {
 		LOGGER.info("***getByEmailAndPass() call Initiated ***");
 		System.out.println("getByEmailAndPass:" + email);
 		Query query = new Query(Criteria.where("email").is(email).and("password").is(password));
-		User users = mongoTemplate.findOne(query, User.class);
-		System.out.println(users);
+		User users= mongoTemplate.findOne(query, User.class);
+        if(users==null) {
+        	throw new UserException("User Not Found");
+        }
+		System.out.println("Users Found"+users);
 		LOGGER.info("***getByEmailAndPass() call Terminated ***");
 		return users;
 

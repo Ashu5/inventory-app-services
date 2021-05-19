@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.mongodb.client.MongoClient;
+
+import inventoryapp.inventoryapp.exceptions.ProductException;
 import inventoryapp.inventoryapp.model.Product;
 import inventoryapp.inventoryapp.service.ProductService;
 
@@ -35,6 +37,7 @@ public class ProductController {
 	public Product addProducts(@RequestBody Product product) {
 		String newId="";
 		LOGGER.info("addProduct API Call initiated *****");
+		try {
 		if(product.getId()==null) {
 			List<Product> products=this.productService.getAllProducts();
 			if(products.size()<1) {
@@ -49,6 +52,9 @@ public class ProductController {
 			
 			System.out.println("newId"+newId);
 			product.setId(newId);
+		}
+		}catch(Exception e) {
+			throw new ProductException("Exception Occured"+e);
 		}
 		return this.productService.save(product);
 	}
